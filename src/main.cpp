@@ -1,8 +1,8 @@
 #include "../include/imageloader.h"
 #include <GL/glut.h>
-#include <stdlib.h>
 
-float _angle = 0.0f;
+//angle, scale factors and position biases
+float angle = 0.0f;
 float x = 0.0f;
 float y = 0.0f;
 float z = 0.0f;
@@ -14,19 +14,21 @@ GLuint _textureWindow;
 GLuint _textureGrass;
 GLuint _textureDoor;
 GLuint _textureBrick;
+
+//keypress handler for scale and rotation
 void NormalKeyHandler(unsigned char key, int a, int b) {
   switch (key) {
   case 'q':
   case 'Q':
-    _angle += 4;
-    if (_angle > 360)
-      _angle = 0.0;
+    angle += 4;
+    if (angle > 360)
+      angle = 0.0;
     break;
   case 'r':
   case 'R':
-    _angle -= 4;
-    if (_angle > 360)
-      _angle = 0.0;
+    angle -= 4;
+    if (angle > 360)
+      angle = 0.0;
     break;
   case 'w':
   case 'W':
@@ -47,14 +49,14 @@ void NormalKeyHandler(unsigned char key, int a, int b) {
     ax = 1.0f;
     ay = 0.0f;
     az = 0.0f;
-    _angle=0.0f;
+    angle = 0.0f;
     break;
   case 'y':
   case 'Y':
     ax = 0.0f;
     ay = 1.0f;
     az = 0.0f;
-    _angle=0.0f;
+    angle = 0.0f;
 
     break;
   case 'Z':
@@ -62,7 +64,7 @@ void NormalKeyHandler(unsigned char key, int a, int b) {
     ax = 0.0f;
     ay = 0.0f;
     az = 1.0f;
-    _angle=0.0f;
+    angle = 0.0f;
 
     break;
   case 'e':
@@ -70,7 +72,7 @@ void NormalKeyHandler(unsigned char key, int a, int b) {
     ax = 1.0f;
     ay = 1.0f;
     ay = 1.0f;
-    _angle=0.0f;
+    angle = 0.0f;
 
     break;
 
@@ -79,6 +81,8 @@ void NormalKeyHandler(unsigned char key, int a, int b) {
   }
   glutPostRedisplay();
 }
+
+//resize method for glut
 static void resize(int width, int height) {
   const float ar = (float)width / (float)height;
   glViewport(0, 0, width, height);
@@ -89,50 +93,51 @@ static void resize(int width, int height) {
   glLoadIdentity();
 }
 
-void renderScene(void) {
+// main loop method for glut, it draws the scene
+void drawScene(void) {
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glEnable(GL_TEXTURE_2D);
 
-  // Sky
-  glPushMatrix();
-  glBindTexture(GL_TEXTURE_2D, _textureSky);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTranslatef(x + 0, y + 0, z + -10);
-  glBegin(GL_QUADS);
-  glTexCoord3f(0.0, 1.0, 0.1f);
-  glVertex3f(-10, 10, 0);
-  glTexCoord3f(1.0, 1.0, 0.1f);
-  glVertex3f(10, 10, 0);
-  glTexCoord3f(1.0, 0.0, 0.1f);
-  glVertex3f(10, -10, 0);
-  glTexCoord3f(0.0, 0.0, 0.1f);
-  glVertex3f(-10, -10, 0);
-  glEnd();
-
-  glPopMatrix();
-
-  // Grass
-  glPushMatrix();
-  glBindTexture(GL_TEXTURE_2D, _textureGrass);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTranslatef(x + 0, y + 0, z - 6);
-  glScalef(sx, sy, sz);
-
-  glRotatef(_angle, ax, ay, az);
-  glBegin(GL_QUADS);
-  glTexCoord3f(0.0, 70.0, 1);
-  glVertex3f(-50, -1.5, 50);
-  glTexCoord3f(0.0, 0.0, -1);
-  glVertex3f(-50, -1.5, -50);
-  glTexCoord3f(70.0, 0.0, -1);
-  glVertex3f(50, -1.5, -50);
-  glTexCoord3f(70.0, 70.0, 1);
-  glVertex3f(50, -1.5, 50);
-  glEnd();
-  glPopMatrix();
+//  // Sky
+//  glPushMatrix();
+//  glBindTexture(GL_TEXTURE_2D, _textureSky);
+//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//  glTranslatef(x + 0, y + 0, z + -10);
+//  glBegin(GL_QUADS);
+//  glTexCoord3f(0.0, 1.0, 0.1f);
+//  glVertex3f(-10, 10, 0);
+//  glTexCoord3f(1.0, 1.0, 0.1f);
+//  glVertex3f(10, 10, 0);
+//  glTexCoord3f(1.0, 0.0, 0.1f);
+//  glVertex3f(10, -10, 0);
+//  glTexCoord3f(0.0, 0.0, 0.1f);
+//  glVertex3f(-10, -10, 0);
+//  glEnd();
+//
+//  glPopMatrix();
+//
+//  // Grass
+//  glPushMatrix();
+//  glBindTexture(GL_TEXTURE_2D, _textureGrass);
+//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+//  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//  glTranslatef(x + 0, y + 0, z - 6);
+//  glScalef(sx, sy, sz);
+//
+//  glRotatef(angle, ax, ay, az);
+//  glBegin(GL_QUADS);
+//  glTexCoord3f(0.0, 70.0, 1);
+//  glVertex3f(-50, -1.5, 50);
+//  glTexCoord3f(0.0, 0.0, -1);
+//  glVertex3f(-50, -1.5, -50);
+//  glTexCoord3f(70.0, 0.0, -1);
+//  glVertex3f(50, -1.5, -50);
+//  glTexCoord3f(70.0, 70.0, 1);
+//  glVertex3f(50, -1.5, 50);
+//  glEnd();
+//  glPopMatrix();
 
   // Front side
   glPushMatrix();
@@ -141,8 +146,7 @@ void renderScene(void) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTranslatef(x + 0, y + 0, z - 6);
   glScalef(sx, sy, sz);
-
-  glRotatef(_angle, ax, ay, az);
+  glRotatef(angle, ax, ay, az);
 
   glBegin(GL_QUADS); // Wall
   glTexCoord3f(0.0, 2.0, 0.1f);
@@ -217,7 +221,7 @@ void renderScene(void) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTranslatef(x + 0, y + 0, z - 6);
   glScalef(sx, sy, sz);
-  glRotatef(_angle, ax, ay, az);
+  glRotatef(angle, ax, ay, az);
 
   glBegin(GL_QUADS); // Wall
   glTexCoord3f(0.0, 2.0, -1);
@@ -276,7 +280,7 @@ void renderScene(void) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTranslatef(x + 0, y + 0, z - 6);
   glScalef(sx, sy, sz);
-  glRotatef(_angle, ax, ay, az);
+  glRotatef(angle, ax, ay, az);
 
   glBegin(GL_QUADS); // Wall
   glTexCoord3f(0.0, 2.0, 1);
@@ -307,7 +311,7 @@ void renderScene(void) {
   glTranslatef(x + 0, y + 0, z - 6);
   glScalef(sx, sy, sz);
 
-  glRotatef(_angle, ax, ay, az);
+  glRotatef(angle, ax, ay, az);
 
   glBegin(GL_QUADS); // Wall
   glTexCoord3f(0.0, 2.0, 1);
@@ -334,7 +338,7 @@ void renderScene(void) {
   glutSwapBuffers();
 }
 
-void mySpecialFunc(int key, int a, int b) {
+void special(int key, int a, int b) {
   switch (key) {
 
   case GLUT_KEY_RIGHT:
@@ -357,19 +361,19 @@ void mySpecialFunc(int key, int a, int b) {
 
 GLuint loadTexture(const Image *image) {
   GLuint textureId;
-  glGenTextures(1, &textureId);            // Make room for our texture
-  glBindTexture(GL_TEXTURE_2D, textureId); // Tell OpenGL which texture to edit
-  // Map the image to the texture
-  glTexImage2D(GL_TEXTURE_2D,               // Always GL_TEXTURE_2D
-               0,                           // 0 for now
-               GL_RGB,                      // Format OpenGL uses for image
-               image->width, image->height, // Width and height
-               0,                           // The border of the image
-               GL_RGB, // GL_RGB, because pixels are stored in RGB format
-               GL_UNSIGNED_BYTE, // GL_UNSIGNED_BYTE, because pixels are stored
-                                 // as unsigned numbers
-               image->pixels);   // The actual pixel data
-  return textureId;              // Returns the id of the texture
+  glGenTextures(1, &textureId);
+  glBindTexture(GL_TEXTURE_2D, textureId);
+
+  glTexImage2D(GL_TEXTURE_2D,
+               0,
+               GL_RGB,
+               image->width, image->height,
+               0,
+               GL_RGB,
+               GL_UNSIGNED_BYTE,
+
+               image->pixels);
+  return textureId;
 }
 
 void Initialize() {
@@ -382,14 +386,14 @@ void Initialize() {
   _textureBrick = loadTexture(image);
   image = loadBMP("door.bmp");
   _textureDoor = loadTexture(image);
-  image = loadBMP("grass.bmp");
-  _textureGrass = loadTexture(image);
+//  image = loadBMP("grass.bmp");
+//  _textureGrass = loadTexture(image);
   image = loadBMP("roof.bmp");
   _textureRoof = loadTexture(image);
   image = loadBMP("window.bmp");
   _textureWindow = loadTexture(image);
-  image = loadBMP("sky.bmp");
-  _textureSky = loadTexture(image);
+//  image = loadBMP("sky.bmp");
+//  _textureSky = loadTexture(image);
   delete image;
 }
 
@@ -402,9 +406,9 @@ int main(int argc, char **argv) {
   glEnable(GL_DEPTH_TEST);
 
   glutReshapeFunc(resize);
-  glutSpecialFunc(mySpecialFunc);
+  glutSpecialFunc(special);
   glutKeyboardFunc(NormalKeyHandler);
-  glutDisplayFunc(renderScene);
+  glutDisplayFunc(drawScene);
   Initialize();
 
   glutMainLoop();
