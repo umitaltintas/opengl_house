@@ -119,9 +119,9 @@ void renderScene(void) {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTranslatef(x + 0, y + 0, z - 6);
-//  glScalef(sx, sy, sz);
+  glScalef(sx, sy, sz);
 
-//  glRotatef(_angle, ax, ay, az);
+  glRotatef(_angle, ax, ay, az);
   glBegin(GL_QUADS);
   glTexCoord3f(0.0, 70.0, 1);
   glVertex3f(-50, -1.5, 50);
