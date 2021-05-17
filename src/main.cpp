@@ -398,7 +398,7 @@ int main(int argc, char **argv) {
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
   glutInitWindowPosition(50, 50);
   glutInitWindowSize(600, 600);
-  glutCreateWindow("Textured House by Rakib");
+  glutCreateWindow("3D House");
   glEnable(GL_DEPTH_TEST);
 
   glutReshapeFunc(resize);
